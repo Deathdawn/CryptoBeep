@@ -2,12 +2,17 @@ import configparser
 import requests
 from gpiozero import Buzzer
 from time import sleep
+import logging
 import RPi.GPIO as GPIO
 import sys,os
+
+
+logging.basicConfig(stream=sys.stderr, level=logging.DEBUG)
 
 # Get the .ini
 config = configparser.ConfigParser()
 config.read('param.ini')
+
 
 # Set the port numbers
 red = int(config['PIN_CONF']['RED'])
@@ -33,14 +38,17 @@ old_value = float(requests.get(api_link + crypto_conversion).json()['result']['X
 
 
 def blink(pin):
+    logging.debug('blink_fonct')
     GPIO.setup(pin,GPIO.OUT)
     GPIO.output(pin,GPIO.HIGH)
 
 def turnoff(pin):
+    logging.debug('turnoff_fonct')
     GPIO.setup(pin,GPIO.OUT)
     GPIO.output(pin,GPIO.LOW)
 
 def gain():
+    logging.debug('gain_fonct')
     blink(green)
     turnoff(red)
     if(buzz_active):
@@ -55,6 +63,7 @@ def gain():
 
     
 def perdition():
+    logging.debug('perdition_fonct')
     turnoff(green)
     blink(red)
     if(buzz_active):
